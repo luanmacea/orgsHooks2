@@ -2,17 +2,11 @@ import { FlatList, Text, StyleSheet } from 'react-native';
 import React, { useEffect, useState } from 'react';
 
 import Produtor from './Produtor';
-import { carregaProdutores } from '../../../servicos/carregaDados';
+import useProdutores from '../../../hooks/useProdutores';
+import estrelas from '../../../componentes/Estrelas';
 
-export default function Produtores({ topo: Topo }) {
-  const [titulo, setTitulo] = useState('');
-  const [lista, setLista] = useState([]);
-
-  useEffect(() => {
-    const retorno = carregaProdutores();
-    setTitulo(retorno.titulo);
-    setLista(retorno.lista);
-  }, [])
+export default function Produtores({ topo: Topo, item }) {
+  const [titulo, lista] = useProdutores();
 
   const TopoLista = () => {
     return <>
@@ -21,10 +15,24 @@ export default function Produtores({ topo: Topo }) {
     </>
   }
 
+  const ordenarPorDistancia = (a, b) => {
+    return a.distancia - b.distancia
+  }
+
+  const ordenarPorestrelas = (a, b) => {
+    return a.estrelas - b.estrelas
+  }
+
+  const ordenarPorNome = (a, b) => {
+    return a.nome.localeCompare(b.nome)
+  }
+
   return <FlatList
-    data={lista}
-    renderItem={({ item }) => <Produtor {...item} />}
-    keyExtractor={({nome}) => nome.id}  //codigo da aula
+    data={lista.sort(ordenarPorestrelas)}
+    renderItem={({ item }) => <Produtor {...item} onAtualizaEstrelas={(quantidade) => {
+      item.estrelas = quantidade
+    }}/>}
+    keyExtractor={({ nome }) => nome.id}  //codigo da aula
     // keyExtractor={item => item.id}
     ListHeaderComponent={TopoLista} />
 }

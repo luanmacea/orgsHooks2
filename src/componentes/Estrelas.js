@@ -1,34 +1,30 @@
-import { Text, Image, StyleSheet, View, TouchableOpacity } from 'react-native'
+import { StyleSheet, View } from 'react-native'
 import React, { useState } from 'react'
 
-import estrela from '../../assets/estrela.png'
-import estrelaCinza from '../../assets/estrelaCinza.png'
+import Estrela from './Estrela'
 
 export default function estrelas({
   quantidade: quantidadeAntiga,
   editavel = false,
   grande = false,
+  onAtualizaEstrelas
 }) {
   const [quantidade, setQuantidade] = useState(quantidadeAntiga)
-  const estilos = estilosFuncao(grande)
-
-  const getImage = (index) => {
-    if (index < quantidade) {
-      return estrela
-    }
-    return estrelaCinza
-  }
 
   const RenderEstrelas = () => {
     const listaEstrelas = []
     for (let i = 0; i < 5; i++) {
       listaEstrelas.push(
-        <TouchableOpacity
+        <Estrela
           key={i}
-          onPress={() => setQuantidade(i + 1)}
-          disabled={!editavel}>
-          <Image source={getImage(i)} style={estilos.estrela} />
-        </TouchableOpacity>
+          onPress={() => {
+            setQuantidade(i + 1)
+            onAtualizaEstrelas(i + 1)
+          }}
+          desabilitada={!editavel}
+
+          preenchida={i < quantidade}
+          grande={grande} />
       )
     }
     return listaEstrelas
@@ -39,12 +35,7 @@ export default function estrelas({
   </View>
 }
 
-const estilosFuncao = (grande) => StyleSheet.create({
-  estrela: {
-    width: grande ? 36 : 12,
-    height: grande ? 36 : 12,
-    marginRight: grande ? 5 : 2
-  },
+const estilos = StyleSheet.create({
   estrelas: {
     flexDirection: 'row',
   }
