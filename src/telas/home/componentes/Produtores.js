@@ -32,7 +32,7 @@ export default function Produtores({ topo: Topo, item }) {
     renderItem={({ item }) => <Produtor {...item} onAtualizaEstrelas={(quantidade) => {
       item.estrelas = quantidade
     }}/>}
-    keyExtractor={({ nome }) => nome.id}  //codigo da aula
+    keyExtractor={({ nome }) => nome}  //codigo da aula
     // keyExtractor={item => item.id}
     ListHeaderComponent={TopoLista} />
 }
