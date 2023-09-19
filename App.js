@@ -1,6 +1,6 @@
 import { SafeAreaView, StatusBar, StyleSheet } from 'react-native';
 
-import Home from './src/telas/home';
+import Home from './src/telas/Home';
 
 function App() {
   return (
